@@ -2,7 +2,7 @@
 
 [//]: # (Image References)
 [image1]: ./output_images/dataset.png
-[image2]: ./output_images/HOG_feature.png
+[image2]: ./output_images/hog_feature.png
 [image3]: ./output_images/sliding_window.png
 [image4]: ./output_images/car_detection.png
 [image5]: ./output_images/video_pipeline.png
