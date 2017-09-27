@@ -3,12 +3,12 @@
 [//]: # (Image References)
 [image1]: ./output_images/dataset.png
 [image2]: ./output_images/HOG_feature.png
-[image3]: ./examples/sliding_windows.jpg
-[image4]: ./examples/sliding_window.jpg
-[image5]: ./examples/bboxes_and_heat.png
-[image6]: ./examples/labels_map.png
-[image7]: ./examples/output_bboxes.png
-[video1]: ./project_video.mp4
+[image3]: ./output_images/sliding_window.png
+[image4]: ./output_images/car_detection.png
+[image5]: ./output_images/video_pipeline.png
+[image6]: ./output_images/labelled_pipeline.png
+[image7]: ./output_images/final_image.png
+
 
 ---
 
@@ -60,26 +60,26 @@ cell_per_block = 2
 
 #### 1. Overview
 
-I implemented the efficient sliding window search where I can extract hog features once and then sub-sample to get all of its overlaying windows. Each window is defined by a scaling factor where a scale of 1 would result in a window that's 8 x 8 cells then the overlap of each window is in terms of the cell distance. This means that a cells_per_step = 2 would result in a search window overlap of 75%.
+The code is implemented such that, hog features and training model parameters are computed and saved once, and then sub-sampled to get all of the overlaying windows. There are multiple windows defined, with different scaling factor. With window of scaling factor 1 would result in a window that's 8 x 8 cells then the overlap of each window is in terms of the cell distance. This means that a cells_per_step = 2 would result in a search window overlap of 75%.
 
-I tried 3 scales at different y-positions. scales = [1.5, 1.25, 1.0] y_start_stops = [(500,680),(400, 600),(380,460)], colors = [blue, green, red]
+Scales of 1.5, 1.25, and 1.0 were used with y-axis ranges of(500,680),(400, 600),and (380,460).
 
 ![alt text][image3]
 
-####2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
+#### 2. Examples of test images to demonstrate pipeline
 
-Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example images:
+For detecting cars, I searched using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example images:
 
 ![alt text][image4]
+
 ---
 
 ### Video Implementation
 
-####1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.)
-Here's a [link to my video result](./project_video.mp4)
+Here's a [link to my video result](./video_output.mp4)
 
 
-####2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
+#### 1. Filter for false positives and method for combining overlapping bounding boxes.
 
 I recorded the positions of positive detections in each frame of the video.  From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions.  I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap.  I then assumed each blob corresponded to a vehicle.  I constructed bounding boxes to cover the area of each blob detected.  
 
@@ -96,11 +96,10 @@ Here's an example result showing the heatmap from a series of frames of video, t
 ![alt text][image7]
 
 
-
 ---
 
-###Discussion
+### Discussion
 
-####1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
-
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+* The window size was chosen to decrease with distance from car in Y direction, but not taken car in x direction. This is one part where I will work on and improve the optimization.
+* The algorithm does not detect well with bright images and this can be solved with better classifier training.
+* When there is an overlap with the car, the algorithm does not detect the one behind. This can be detected by having a memory of previous detected car.
