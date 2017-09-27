@@ -45,6 +45,7 @@ YCrCb color space provided the best validation accuracy, and was used in this pr
 
 Code block 7 shows the code for training the classifier. Support Vector Machine, linear SVC is used for classification. This classification is fed with hog features, color histogram and spatial features. Model accuracy of 99.21% with 0.00346 seconds to predict 10 samples was obtained.
 
+c_parameter of 0.001 is chosen to remove the false positives in the video.
 The parameters for final model was
 ```python
 color_space = 'YCrCb'
